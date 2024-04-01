@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "test",
-    "dev": "nodemon index.js"
-  },
+    "dev": "nodemon index.js", 
+    "start": "yarn start"  },
   "author": "",
   "license": "ISC",
   "dependencies": {
