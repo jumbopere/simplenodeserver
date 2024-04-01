@@ -4,7 +4,7 @@ import cors from "cors"
 import words from "an-array-of-english-words"  assert { type: "json" };
 
 const app = express();
-const PORT = 3100;
+const PORT = process.env.PORT || 3100;
 
 // Middleware
 app.use(cors());

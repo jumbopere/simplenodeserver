@@ -6,8 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "test",
-    "dev": "nodemon index.js", 
-    "start": "yarn start"  },
+    "start": "node index.js" },
   "author": "",
   "license": "ISC",
   "dependencies": {
