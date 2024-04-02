@@ -38,7 +38,7 @@ app.get('/', (req,res)=> {
 app.post('/generate-words', (req, res) => {
   const { inputLetters } = req.body;
   if (!inputLetters || inputLetters.length !== 6) {
-    return res.json({status:400},{ error: 'Please provide 6 letters' });
+    return res.status(400).json({ error: 'Please provide 6 letters' });
   }
 
   const maxLength = Math.min(6, inputLetters.length);
