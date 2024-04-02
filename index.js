@@ -13,18 +13,22 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 // Function to filter words based on input letters
-const filterWords = (inputLetters, wordLength) => {
-  const validWords = words.filter(word => {
-    if (word.length !== wordLength) return false;
-    const letters = inputLetters.split('');
+
+const filterWords = (inputLetters, maxLength) => {
+  const inputMap = {};
+  for (let letter of inputLetters) {
+    inputMap[letter] = (inputMap[letter] || 0) + 1;
+  }
+
+  return words.filter(word => {
+    if (word.length > maxLength) return false;
+    const wordMap = {};
     for (let char of word) {
-      const index = letters.indexOf(char);
-      if (index === -1) return false;
-      letters.splice(index, 1);
+      wordMap[char] = (wordMap[char] || 0) + 1;
+      if (wordMap[char] > (inputMap[char] || 0)) return false;
     }
     return true;
   });
-  return validWords;
 };
 
 // Route to handle word generation
@@ -33,23 +37,23 @@ app.get('/', (req,res)=> {
 })
 app.post('/generate-words', (req, res) => {
   const { inputLetters } = req.body;
-
   if (!inputLetters || inputLetters.length !== 6) {
-
-    return res.status(400).json({ error: inputLetters.length});
+    return res.json({status:400},{ error: 'Please provide 6 letters' });
   }
 
-  const threeLetterWords = filterWords(inputLetters, 3);
-  const fourLetterWords = filterWords(inputLetters, 4);
-  const fiveLetterWords = filterWords(inputLetters, 5);
-  const sixLetterWords = filterWords(inputLetters, 6);
+  const maxLength = Math.min(6, inputLetters.length);
+  const validWords = filterWords(inputLetters, maxLength);
 
-  return res.json({ 
-    threeLetterWords,
-    fourLetterWords,
-    fiveLetterWords,
-    sixLetterWords
-  });
+  const wordGroups = {};
+  for (let word of validWords) {
+    const length = word.length;
+    if (!wordGroups[length]) {
+      wordGroups[length] = [];
+    }
+    wordGroups[length].push(word);
+  }
+
+  return res.json(Object.values(wordGroups));
 });
 
 // Start server
