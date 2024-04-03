@@ -8,11 +8,13 @@ const PORT = 3100;
 
 // Middleware
 app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.json());
+//  app.use(bodyParser.urlencoded({ extended: false }));
 
+app.use(bodyParser.json({
+  type: "*/*"
+}));
 
-// Function to filter words based on input letters
 
 const filterWords = (inputLetters, maxLength) => {
   const inputMap = {};
